@@ -21,10 +21,8 @@ export const formatWeight = (lbs: number, unit: WeightUnit, withUnit = true) =>
   `${weightToDisplay(lbs, unit).toFixed(1)}${withUnit ? ` ${unit}` : ''}`;
 
 export function formatWater(oz: number, unit: WaterUnit, withUnit = true) {
-  const v = waterToDisplay(oz, unit);
-  const s = unit === 'ml' && v >= 1000 ? `${(v / 1000).toFixed(v >= 10000 ? 0 : 1)}` : `${Math.round(v)}`;
-  const u = unit === 'ml' && v >= 1000 ? 'L' : unit;
-  return withUnit ? `${s} ${u}` : s;
+  const v = Math.round(waterToDisplay(oz, unit)).toLocaleString();
+  return withUnit ? `${v} ${unit}` : v;
 }
 
 /** Signed delta, e.g. "−1.4 lbs" / "+0.6 lbs" (true minus sign for typography). */
