@@ -42,7 +42,7 @@ export function PresetSheet({ open, onClose, preset }: Props) {
     setDraftErr({});
     setErr(null);
     setAdding(!preset);
-  }, [open, preset]);
+  }, [open]); // reset only when the sheet opens, not on every live-query refresh
 
   const totals = sumFoods(items);
 

@@ -28,7 +28,7 @@ export function WaterSheet({ open, onClose, entry, defaultTimestamp }: Props) {
     setAmount(entry ? String(waterToDisplay(entry.oz, unit)) : '');
     setWhen(toDateTimeInput(entry?.timestamp ?? defaultTimestamp ?? Date.now()));
     setErrors({});
-  }, [open, entry, unit, defaultTimestamp]);
+  }, [open]); // reset only when the sheet opens, not on every live-query refresh
 
   async function save() {
     const e = validate({ amount, when }, {

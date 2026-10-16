@@ -44,7 +44,7 @@ export function FoodSheet({ open, onClose, entry, prefill, meal, defaultTimestam
     setWhen(toDateTimeInput(entry?.timestamp ?? defaultTimestamp ?? Date.now()));
     setSavePreset(false);
     setErrors({});
-  }, [open, entry, prefill, meal, defaultTimestamp]);
+  }, [open]); // reset only when the sheet opens, not on every live-query refresh
 
   const set = (k: keyof FoodValues) => (e: React.ChangeEvent<HTMLInputElement>) => setV((s) => ({ ...s, [k]: e.target.value }));
 

@@ -34,7 +34,7 @@ export function WeightSheet({ open, onClose, entry, lastLbs, defaultTimestamp }:
     setWhen(toDateTimeInput(entry?.timestamp ?? defaultTimestamp ?? Date.now()));
     setNote(entry?.note ?? '');
     setErrors({});
-  }, [open, entry, lastLbs, unit, defaultTimestamp]);
+  }, [open]); // reset only when the sheet opens, not on every live-query refresh
 
   const [min, max] = unit === 'kg' ? [20, 320] : [45, 700];
 
