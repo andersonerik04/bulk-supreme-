@@ -114,6 +114,15 @@
   }
 }
 
+/* Sparkline draw-in */
+.spark-draw {
+  stroke-dashoffset: 1;
+  animation: spark-draw 1100ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms forwards;
+}
+@keyframes spark-draw {
+  to { stroke-dashoffset: 0; }
+}
+
 /* Staggered entrance for cards */
 .stagger > * {
   animation: fade-up 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
