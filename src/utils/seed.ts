@@ -64,6 +64,8 @@ const MEAL_HOURS: Record<MealType, [number, number]> = {
   snacks: [15, 21.5],
 };
 
+const MAINTENANCE = 2350;
+
 const NOTES = ['Morning, fasted', 'Morning, fasted', 'After workout', 'Slept badly', 'Post-travel', undefined];
 
 export async function seedSampleData(days = 60) {
@@ -97,12 +99,13 @@ export async function seedSampleData(days = 60) {
     // A few completely missed days for a realistic heatmap.
     if (i > 0 && rand() < 0.05) continue;
 
-    // Underlying trend: steady loss with a plateau in the middle third.
+    // A "lapse" stretch mid-way (holidays/travel) with bigger portions, so the
+    // weight-vs-calories view has a real relationship to show.
     const phase = (days - i) / days;
-    const dailyLoss = phase > 0.4 && phase < 0.55 ? 0.01 : 0.13;
-    trueWeight -= dailyLoss + gauss() * 0.04;
+    const lapse = phase > 0.42 && phase < 0.58;
+    const dayStart = foods.length;
 
-    // Weigh-in (~88% of days), noisy around the trend with weekend water-weight bumps.
+    // Morning weigh-in (~88% of days) reflects energy balance up to yesterday, noisy around the trend with weekend water-weight bumps.
     const weighTime = at(6.5 + rand() * 1.5);
     if (rand() < 0.88 && weighTime < now) {
       const bump = dow === 1 ? 0.9 : dow === 0 ? 0.5 : 0;
@@ -118,7 +121,7 @@ export async function seedSampleData(days = 60) {
     // Meals
     for (const meal of ['breakfast', 'lunch', 'dinner', 'snacks'] as MealType[]) {
       if (meal === 'breakfast' && rand() < 0.08) continue; // skipped breakfast
-      if (meal === 'snacks' && rand() < (weekend ? 0.1 : 0.35)) continue;
+      if (meal === 'snacks' && !lapse && rand() < (weekend ? 0.1 : 0.35)) continue;
       const [h0, h1] = MEAL_HOURS[meal];
       const ts = at(h0 + rand() * (h1 - h0));
       if (ts > now) continue;
@@ -126,7 +129,7 @@ export async function seedSampleData(days = 60) {
       for (const combo of combos) {
         for (const item of combo) {
           // Portion variance ±12%
-          const k = 1 + (rand() - 0.5) * 0.24;
+          const k = (1 + (rand() - 0.5) * 0.24) * (lapse ? 1.3 : 1);
           foods.push({
             ...item,
             calories: Math.round(item.calories * k),
@@ -141,6 +144,11 @@ export async function seedSampleData(days = 60) {
         }
       }
     }
+
+    // Energy balance (~3500 kcal per lb) drives the underlying weight trend.
+    const eaten = foods.slice(dayStart).reduce((sum, e) => sum + e.calories, 0);
+    const intake = eaten || 2100; // unlogged/partial days assumed near maintenance-ish
+    trueWeight -= (MAINTENANCE - intake) / 3500 + gauss() * 0.03;
 
     // Water: 5–9 drinks spread through the day
     const drinks = 5 + Math.floor(rand() * 5);

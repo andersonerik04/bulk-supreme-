@@ -27,7 +27,7 @@ export function MacroDonut({ totals, size = 116 }: { totals: Totals; size?: numb
     <div className="flex items-center gap-5">
       <div className="relative shrink-0" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgb(var(--line) / 0.08)" strokeWidth={stroke} />
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" style={{ stroke: 'rgb(var(--line) / 0.08)' }} strokeWidth={stroke} />
           {total > 0 &&
             SEGMENTS.map((s, i) => {
               const len = (kcals[i] / total) * c;
@@ -39,11 +39,10 @@ export function MacroDonut({ totals, size = 116 }: { totals: Totals; size?: numb
                   cy={size / 2}
                   r={r}
                   fill="none"
-                  stroke={s.color}
                   strokeWidth={stroke}
                   strokeDasharray={`${ready ? dash : 0} ${c}`}
                   strokeDashoffset={-offset}
-                  style={{ transition: `stroke-dasharray 900ms cubic-bezier(.2,.8,.2,1) ${i * 120}ms` }}
+                  style={{ stroke: s.color, transition: `stroke-dasharray 900ms cubic-bezier(.2,.8,.2,1) ${i * 120}ms` }}
                 />
               );
               offset += len;

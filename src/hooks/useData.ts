@@ -54,6 +54,20 @@ export function useLoggedDays() {
   }, []);
 }
 
+/** Day → number of categories (weight, food, water) logged that day, across all history. */
+export function useDayLevels() {
+  return useLiveQuery(async () => {
+    const sets = await Promise.all([
+      db.weights.orderBy('day').uniqueKeys(),
+      db.foods.orderBy('day').uniqueKeys(),
+      db.water.orderBy('day').uniqueKeys(),
+    ]);
+    const m = new Map<DayKey, number>();
+    for (const keys of sets) for (const k of keys as DayKey[]) m.set(k, (m.get(k) ?? 0) + 1);
+    return m;
+  }, []);
+}
+
 export function useStreak() {
   const days = useLoggedDays();
   return useMemo(() => (days ? computeStreak(days) : undefined), [days]);

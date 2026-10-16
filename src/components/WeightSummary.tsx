@@ -5,6 +5,7 @@ import { changeOver, projectGoal, type DailyWeight } from '@/utils/stats';
 import { formatWeight, formatWeightDelta, weightToDisplay } from '@/utils/units';
 import { clamp } from '@/utils/format';
 import { Icon } from './Icon';
+import { usePalette } from '@/hooks/usePalette';
 
 function Delta({ label, value, unit }: { label: string; value: number | null; unit: Settings['weightUnit'] }) {
   return (
@@ -19,6 +20,7 @@ function Delta({ label, value, unit }: { label: string; value: number | null; un
 
 export function WeightSummary({ daily, settings, onLog }: { daily: DailyWeight[]; settings: Settings; onLog: () => void }) {
   const unit = settings.weightUnit;
+  const c = usePalette();
   const last = daily[daily.length - 1];
   const prev = daily[daily.length - 2];
   const sinceLast = last && prev ? last.lbs - prev.lbs : null;
@@ -53,12 +55,12 @@ export function WeightSummary({ daily, settings, onLog }: { daily: DailyWeight[]
             <AreaChart data={spark} margin={{ top: 4, bottom: 0, left: 0, right: 0 }}>
               <defs>
                 <linearGradient id="spark-w" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0" stopColor="rgb(var(--weight))" stopOpacity={0.35} />
-                  <stop offset="1" stopColor="rgb(var(--weight))" stopOpacity={0} />
+                  <stop offset="0" stopColor={c.weight} stopOpacity={0.35} />
+                  <stop offset="1" stopColor={c.weight} stopOpacity={0} />
                 </linearGradient>
               </defs>
               <YAxis hide domain={['dataMin - 0.5', 'dataMax + 0.5']} />
-              <Area type="monotone" dataKey="v" stroke="rgb(var(--weight))" strokeWidth={2.2} fill="url(#spark-w)" animationDuration={900} />
+              <Area type="monotone" dataKey="v" stroke={c.weight} strokeWidth={2.2} fill="url(#spark-w)" animationDuration={900} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

@@ -26,18 +26,17 @@ export function ProgressRing({ value, size = 140, stroke = 14, color, children, 
   return (
     <div className="relative inline-grid place-items-center" style={{ width: size, height: size }} role="img" aria-label={label}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeOpacity={0.16} strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" style={{ stroke: color }} strokeOpacity={0.16} strokeWidth={stroke} />
         <circle
           cx={size / 2}
           cy={size / 2}
           r={r}
           fill="none"
-          stroke={color}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c * (1 - lap1)}
-          style={{ transition }}
+          style={{ transition, stroke: color }}
         />
         {lap2 > 0 && (
           <circle
@@ -45,12 +44,11 @@ export function ProgressRing({ value, size = 140, stroke = 14, color, children, 
             cy={size / 2}
             r={r}
             fill="none"
-            stroke={color}
             strokeWidth={stroke}
             strokeLinecap="round"
             strokeDasharray={c}
             strokeDashoffset={c * (1 - lap2)}
-            style={{ transition, filter: 'brightness(1.25) drop-shadow(0 0 3px rgb(0 0 0 / .5))' }}
+            style={{ transition, stroke: color, filter: 'brightness(1.25) drop-shadow(0 0 3px rgb(0 0 0 / .5))' }}
           />
         )}
       </svg>

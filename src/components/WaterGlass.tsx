@@ -22,14 +22,14 @@ export function WaterGlass({ value, height = 200 }: { value: number; height?: nu
           <path d="M14 10 L106 10 L96 150 Q95 156 89 156 L31 156 Q25 156 24 150 Z" />
         </clipPath>
         <linearGradient id={`w-${id}`} x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="rgb(var(--water))" stopOpacity="0.95" />
-          <stop offset="1" stopColor="rgb(var(--water))" stopOpacity="0.6" />
+          <stop offset="0" style={{ stopColor: 'rgb(var(--water))', stopOpacity: 0.95 }} />
+          <stop offset="1" style={{ stopColor: 'rgb(var(--water))', stopOpacity: 0.6 }} />
         </linearGradient>
       </defs>
       <g clipPath={`url(#g-${id})`}>
-        <rect x="0" y="0" width="120" height="160" fill="rgb(var(--water) / 0.08)" />
+        <rect x="0" y="0" width="120" height="160" style={{ fill: 'rgb(var(--water) / 0.08)' }} />
         <g style={{ transform: `translateY(${y}px)`, transition: 'transform 1200ms cubic-bezier(.2,.8,.2,1)' }}>
-          <path d={wave(5)} fill="rgb(var(--water) / 0.35)" className="animate-wave" style={{ animationDuration: '6s' }} />
+          <path d={wave(5)} className="animate-wave" style={{ fill: 'rgb(var(--water) / 0.35)', animationDuration: '6s' }} />
           <path d={wave(4)} fill={`url(#w-${id})`} className="animate-wave" transform="translate(0 3)" style={{ animationDuration: '3.6s', animationDirection: 'reverse' }} />
         </g>
         {/* bubbles */}
@@ -41,7 +41,7 @@ export function WaterGlass({ value, height = 200 }: { value: number; height?: nu
             </circle>
           ))}
       </g>
-      <path d="M14 10 L106 10 L96 150 Q95 156 89 156 L31 156 Q25 156 24 150 Z" fill="none" stroke="rgb(var(--line) / 0.18)" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M14 10 L106 10 L96 150 Q95 156 89 156 L31 156 Q25 156 24 150 Z" fill="none" style={{ stroke: 'rgb(var(--line) / 0.18)' }} strokeWidth="2.5" strokeLinejoin="round" />
       <path d="M22 22 L28 130" stroke="white" strokeOpacity="0.12" strokeWidth="4" strokeLinecap="round" />
     </svg>
   );
