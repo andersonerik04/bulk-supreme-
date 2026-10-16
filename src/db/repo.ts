@@ -12,6 +12,22 @@ import {
 } from './types';
 import { toDayKey } from '@/utils/date';
 
+/*
+ * iOS Safari can fail any IndexedDB *cursor* with "UnknownError: Unable to open
+ * cursor". Cursors back Dexie's each(), uniqueKeys(), reverse(), first(),
+ * equalsIgnoreCase() and Collection.delete(). Every read here therefore uses
+ * toArray() / sortBy() / count(), which map to IDB getAll()/count() and never open a
+ * cursor, and does any sorting, de-duplication or filtering in JS. The data is
+ * small (thousands of rows at most), so this costs nothing noticeable.
+ */
+
+/** Distinct day keys present in each log table. */
+export async function allLoggedDays() {
+  const [weights, foods, water] = await Promise.all([db.weights.toArray(), db.foods.toArray(), db.water.toArray()]);
+  const days = (rows: { day: string }[]) => [...new Set(rows.map((r) => r.day))];
+  return { weights: days(weights), foods: days(foods), water: days(water) };
+}
+
 /* ---------- Settings ---------- */
 
 export async function getSettings(): Promise<Settings> {
@@ -78,19 +94,17 @@ const round1 = (n: number) => Math.round(n * 10) / 10;
 
 /** Most recently logged distinct foods (by name + serving). */
 export async function recentFoods(limit = 12): Promise<FoodEntry[]> {
+  const all = await db.foods.toArray();
+  all.sort((a, b) => b.timestamp - a.timestamp);
   const seen = new Set<string>();
   const out: FoodEntry[] = [];
-  await db.foods
-    .orderBy('timestamp')
-    .reverse()
-    .until(() => out.length >= limit)
-    .each((e) => {
-      const key = `${e.name.toLowerCase()}|${e.serving.toLowerCase()}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        out.push(e);
-      }
-    });
+  for (const e of all) {
+    const key = `${e.name.toLowerCase()}|${e.serving.toLowerCase()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(e);
+    if (out.length >= limit) break;
+  }
   return out;
 }
 
@@ -116,11 +130,11 @@ export async function toggleFavorite(id: number) {
 
 /** Favorite a food from the log: reuse a matching single-item preset or create one. */
 export async function favoriteFromEntry(e: FoodItem, meal?: MealType) {
-  const existing = await db.presets
-    .where('name')
-    .equalsIgnoreCase(e.name.trim())
-    .filter((p) => p.kind === 'food' && p.items[0]?.serving.toLowerCase() === e.serving.trim().toLowerCase())
-    .first();
+  const name = e.name.trim().toLowerCase();
+  const serving = e.serving.trim().toLowerCase();
+  const existing = (await db.presets.toArray()).find(
+    (p) => p.kind === 'food' && p.name.toLowerCase() === name && p.items[0]?.serving.toLowerCase() === serving,
+  );
   if (existing?.id != null) {
     await db.presets.update(existing.id, { favorite: existing.favorite ? 0 : 1 });
     return existing.id;
@@ -186,12 +200,10 @@ export async function hasSampleData() {
 }
 
 export async function clearSampleData() {
+  const sampleIds = async (t: { toArray(): Promise<{ id?: number; sample?: 0 | 1 }[]> }) =>
+    (await t.toArray()).filter((r) => r.sample === 1).map((r) => r.id!);
   await db.transaction('rw', [db.weights, db.foods, db.water, db.presets], async () => {
-    await Promise.all([
-      db.weights.where('sample').equals(1).delete(),
-      db.foods.where('sample').equals(1).delete(),
-      db.water.where('sample').equals(1).delete(),
-      db.presets.where('sample').equals(1).delete(),
-    ]);
+    const [w, f, h, p] = await Promise.all([sampleIds(db.weights), sampleIds(db.foods), sampleIds(db.water), sampleIds(db.presets)]);
+    await Promise.all([db.weights.bulkDelete(w), db.foods.bulkDelete(f), db.water.bulkDelete(h), db.presets.bulkDelete(p)]);
   });
 }
