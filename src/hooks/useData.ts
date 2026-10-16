@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
 import { db } from '@/db/db';
 import type { DayKey, FoodEntry, FoodPreset, WaterEntry, WeightEntry } from '@/db/types';
-import { recentFoods } from '@/db/repo';
+import { allLoggedDays, recentFoods } from '@/db/repo';
 import { computeStreak, dailyWeights, sumFoods, sumWater } from '@/utils/stats';
 
 const sortTs = <T extends { timestamp: number }>(xs: T[]) => xs.sort((a, b) => a.timestamp - b.timestamp);
@@ -45,25 +45,17 @@ export function useRange(from: DayKey | undefined) {
 /** Set of every day that has at least one log entry of any kind. */
 export function useLoggedDays() {
   return useLiveQuery(async () => {
-    const [a, b, c] = await Promise.all([
-      db.weights.orderBy('day').uniqueKeys(),
-      db.foods.orderBy('day').uniqueKeys(),
-      db.water.orderBy('day').uniqueKeys(),
-    ]);
-    return new Set([...a, ...b, ...c] as DayKey[]);
+    const { weights, foods, water } = await allLoggedDays();
+    return new Set([...weights, ...foods, ...water]);
   }, []);
 }
 
 /** Day → number of categories (weight, food, water) logged that day, across all history. */
 export function useDayLevels() {
   return useLiveQuery(async () => {
-    const sets = await Promise.all([
-      db.weights.orderBy('day').uniqueKeys(),
-      db.foods.orderBy('day').uniqueKeys(),
-      db.water.orderBy('day').uniqueKeys(),
-    ]);
+    const { weights, foods, water } = await allLoggedDays();
     const m = new Map<DayKey, number>();
-    for (const keys of sets) for (const k of keys as DayKey[]) m.set(k, (m.get(k) ?? 0) + 1);
+    for (const days of [weights, foods, water]) for (const k of days) m.set(k, (m.get(k) ?? 0) + 1);
     return m;
   }, []);
 }
@@ -83,12 +75,9 @@ export function useRecentFoods(limit = 12) {
 
 export function useEarliestDay() {
   return useLiveQuery(async () => {
-    const [w, f, h] = await Promise.all([
-      db.weights.orderBy('day').first(),
-      db.foods.orderBy('day').first(),
-      db.water.orderBy('day').first(),
-    ]);
-    const days = [w?.day, f?.day, h?.day].filter(Boolean) as DayKey[];
-    return days.length ? days.sort()[0] : null;
+    const { weights, foods, water } = await allLoggedDays();
+    let min: DayKey | null = null;
+    for (const days of [weights, foods, water]) for (const d of days) if (min === null || d < min) min = d;
+    return min;
   }, []);
 }
