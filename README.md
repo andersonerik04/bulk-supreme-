@@ -45,29 +45,28 @@ Sample rows are tagged (`sample: 1`), so **Clear sample** removes only them and 
 
 ## Deploying
 
-The app uses hash-based routing (`/#/trends`), so it needs no server rewrites. Set `BASE_PATH` when the site is served from a sub-path.
+Production builds use the base path **`/bulk-supreme-/`** (set in `vite.config.ts`), because GitHub Pages serves this repo from `https://andersonerik04.github.io/bulk-supreme-/`. Every script, stylesheet, icon, the manifest's `start_url`/`scope`, and the service worker's fallback live under that path. Routing uses hashes (`/#/trends`), so no server rewrites are needed. To serve from a domain root instead (e.g. Vercel), build with `BASE_PATH=/`.
 
 ### GitHub Pages
 
-A workflow is included at `.github/workflows/deploy.yml`.
+The workflow `.github/workflows/deploy.yml` builds the app and publishes `dist/`. It runs on every push to `main` and can be started by hand from **Actions → Deploy to GitHub Pages → Run workflow**.
 
-1. Push to `main`, or merge this branch into it.
-2. In the repo, go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
-3. The workflow builds with `BASE_PATH=/<repo-name>/` and publishes. The app will be at `https://<user>.github.io/<repo-name>/`.
+One-time setup: in the repo, go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**. Don't use "Deploy from a branch", which would serve the raw source files instead of the built app.
 
-To build for Pages by hand: `BASE_PATH=/<repo-name>/ npm run build`, then publish `dist/`.
+The site is then at **https://andersonerik04.github.io/bulk-supreme-/**. Note the trailing dash, which is part of the repo name.
 
 ### Vercel
 
 1. Import the repository at [vercel.com/new](https://vercel.com/new).
 2. Framework preset: **Vite**. Build command: `npm run build`. Output directory: `dist`.
-3. Deploy. No environment variables are needed, because the base path defaults to `/`.
-
-Or from the CLI: `npx vercel` and then `npx vercel --prod`.
+3. Add the environment variable **`BASE_PATH` = `/`**, so the app is served from the domain root.
+4. Deploy.
 
 ### Install on iPhone
 
 Open the deployed URL in **Safari**, tap **Share → Add to Home Screen**, and launch Ledger from the icon. It runs full-screen, respects the notch and home indicator, and works offline after the first load. Updates are picked up automatically the next time you open it online.
+
+> If Ledger shows "Safari isn't letting Ledger store data", go to **Settings → Apps → Safari** and turn off **Block All Cookies**. That switch also blocks the on-device database the app needs.
 
 > Data lives in that browser's storage on that device. Safari can evict storage for sites you haven't visited in a long time, but installed home-screen apps are exempt. **Export a JSON backup** from Settings now and then anyway.
 

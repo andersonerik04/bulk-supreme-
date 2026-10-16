@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import { ToastProvider } from './components/Toast';
+import { AppErrorBoundary, DbGate } from './components/StartupGuard';
 import './index.css';
 
 registerSW({ immediate: true });
@@ -17,10 +18,15 @@ if (import.meta.env.DEV) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HashRouter>
-      <ToastProvider>
-        <App />
-      </ToastProvider>
-    </HashRouter>
+    <AppErrorBoundary>
+      <DbGate>
+        {/* Hash routes (/#/trends) work under the /bulk-supreme-/ sub-path with no server rewrites. */}
+        <HashRouter>
+          <ToastProvider>
+            <App />
+          </ToastProvider>
+        </HashRouter>
+      </DbGate>
+    </AppErrorBoundary>
   </StrictMode>,
 );
