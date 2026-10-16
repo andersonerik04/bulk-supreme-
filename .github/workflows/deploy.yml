@@ -24,10 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Served from https://<user>.github.io/<repo>/ so assets need the repo sub-path.
+      # vite.config.ts builds with base /bulk-supreme-/ (the repo sub-path Pages serves from).
       - run: npm run build
-        env:
-          BASE_PATH: /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
