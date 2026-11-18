@@ -119,7 +119,7 @@ export function PresetSheet({ open, onClose, preset }: Props) {
               </div>
               <div className="flex gap-2">
                 {items.length > 0 && <button className="btn-ghost flex-1" onClick={() => setAdding(false)}>Cancel</button>}
-                <button className="btn flex-1 bg-food text-white" onClick={addDraft}>Add item</button>
+                <button className="btn flex-1 bg-food text-on-accent" onClick={addDraft}>Add item</button>
               </div>
             </div>
           ) : (
@@ -154,7 +154,7 @@ export function PresetSheet({ open, onClose, preset }: Props) {
       </div>
       <div className="mt-6 flex gap-3">
         {preset && <button className="btn-danger" onClick={remove}>Delete</button>}
-        <button className="btn flex-1 bg-food text-white" onClick={save}>Save preset</button>
+        <button className="btn flex-1 bg-food text-on-accent" onClick={save}>Save preset</button>
       </div>
     </Sheet>
   );

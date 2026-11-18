@@ -39,9 +39,9 @@ export function WaterTab() {
         <div key={pulse} className={pulse ? 'animate-pop' : ''}>
           <WaterGlass value={p} height={210} />
         </div>
-        <p className="num mt-4 font-display text-4xl font-bold text-water">{formatWater(oz, s.waterUnit, false)}<span className="ml-1 text-lg font-semibold text-muted">/ {formatWater(s.waterTargetOz, s.waterUnit)}</span></p>
+        <p className="num mt-4 font-num text-[54px] font-semibold text-water">{formatWater(oz, s.waterUnit, false)}<span className="ml-1 text-lg font-semibold text-muted">/ {formatWater(s.waterTargetOz, s.waterUnit)}</span></p>
         <p className="mt-1 text-sm text-muted">
-          {p >= 1 ? 'Goal reached — nicely done 💧' : `${formatWater(Math.max(0, s.waterTargetOz - oz), s.waterUnit)} to go · ${Math.round(p * 100)}%`}
+          {p >= 1 ? 'Goal reached for today' : `${formatWater(Math.max(0, s.waterTargetOz - oz), s.waterUnit)} to go · ${Math.round(p * 100)}%`}
         </p>
 
         <div className="mt-5 grid w-full grid-cols-4 gap-2">

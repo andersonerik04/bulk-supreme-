@@ -64,7 +64,7 @@ const MEAL_HOURS: Record<MealType, [number, number]> = {
   snacks: [15, 21.5],
 };
 
-const MAINTENANCE = 2350;
+const MAINTENANCE = 2300;
 
 const NOTES = ['Morning, fasted', 'Morning, fasted', 'After workout', 'Slept badly', 'Post-travel', undefined];
 
@@ -82,7 +82,7 @@ export async function seedSampleData(days = 60) {
   const foods: FoodEntry[] = [];
   const water: WaterEntry[] = [];
 
-  const startLbs = 192.4;
+  const startLbs = 171.6;
   let trueWeight = startLbs;
 
   for (let i = days; i >= 0; i--) {
@@ -99,7 +99,7 @@ export async function seedSampleData(days = 60) {
     // A few completely missed days for a realistic heatmap.
     if (i > 0 && rand() < 0.05) continue;
 
-    // A "lapse" stretch mid-way (holidays/travel) with bigger portions, so the
+    // A "lapse" stretch mid-way (sick week / travel) with smaller portions, so the
     // weight-vs-calories view has a real relationship to show.
     const phase = (days - i) / days;
     const lapse = phase > 0.42 && phase < 0.58;
@@ -129,7 +129,7 @@ export async function seedSampleData(days = 60) {
       for (const combo of combos) {
         for (const item of combo) {
           // Portion variance ±12%
-          const k = (1 + (rand() - 0.5) * 0.24) * (lapse ? 1.3 : 1);
+          const k = (1 + (rand() - 0.5) * 0.24) * (lapse ? 0.85 : 1.55); // bulk portions
           foods.push({
             ...item,
             calories: Math.round(item.calories * k),
@@ -176,7 +176,7 @@ export async function seedSampleData(days = 60) {
 
   // Give the goal/projection UI something to show if no goal is set yet.
   const s = await getSettings();
-  if (s.goalWeightLbs == null) await updateSettings({ goalWeightLbs: 180, goalStartLbs: startLbs });
+  if (s.goalWeightLbs == null) await updateSettings({ goalWeightLbs: 182, goalStartLbs: startLbs });
 
   return { weights: weights.length, foods: foods.length, water: water.length, firstDay: toDayKey(fromDayKey(daysAgoKey(days))) };
 }

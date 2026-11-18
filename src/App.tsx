@@ -17,7 +17,10 @@ export default function App() {
   const settings = useSettings();
   useApplyTheme(settings.theme);
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // Braced body: scrollTo() returns a Promise in newer browsers, and React would call it as a cleanup.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
@@ -32,7 +35,8 @@ export default function App() {
           <Route path="*" element={<Dashboard />} />
         </Routes>
       </main>
-      {pathname !== '/settings' && <Fab />}
+      {/* Log and Settings have their own actions; the FAB would only cover them. */}
+      {pathname !== '/settings' && pathname !== '/log' && <Fab />}
       <TabBar />
     </>
   );

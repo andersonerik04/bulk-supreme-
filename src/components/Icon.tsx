@@ -28,6 +28,9 @@ const paths = {
   layers: 'M12 3 3 8l9 5 9-5zM3 13l9 5 9-5',
   search: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4',
   trend: 'M3 17l6-6 4 4 8-8M15 7h6v6',
+  camera: 'M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5zM12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+  scan: 'M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10',
+  key: 'M14.5 9.5a4 4 0 1 1-1.2 2.8L4 21.5V18h2.5v-2.5H9l1.8-1.8',
 } as const;
 
 export type IconName = keyof typeof paths;

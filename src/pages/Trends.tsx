@@ -11,7 +11,7 @@ import { useDayLevels, useEarliestDay, useRange, useWeights } from '@/hooks/useD
 import { useSettings } from '@/hooks/useSettings';
 import type { DayKey } from '@/db/types';
 import { dayRange, daysAgoKey, fromDayKey, shiftDay, toDayKey, todayKey } from '@/utils/date';
-import { mean, pearson, totalsByDay, waterByDay } from '@/utils/stats';
+import { deltaTone, mean, pearson, toneClass, totalsByDay, waterByDay } from '@/utils/stats';
 import { fmtInt } from '@/utils/format';
 import { formatWater, formatWeightDelta, weightToDisplay } from '@/utils/units';
 
@@ -182,7 +182,7 @@ export default function Trends() {
             subtitle="Daily weigh-ins · 7-day rolling average"
             right={
               view.weightChange != null && (
-                <span className={`num rounded-full px-2.5 py-1 text-xs font-semibold ${view.weightChange <= 0 ? 'bg-fat/15 text-fat' : 'bg-food/15 text-food'}`}>
+                <span className={`num rounded-full bg-line/[0.06] px-2.5 py-1 text-xs font-semibold ${toneClass[deltaTone(view.weightChange, settings.goalWeightLbs, daily?.at(-1)?.lbs)]}`}>
                   {formatWeightDelta(view.weightChange, unit)}
                 </span>
               )
@@ -214,14 +214,14 @@ export default function Trends() {
               ].map((s) => (
                 <div key={s.label} className="card !p-3.5">
                   <p className={`label ${s.color}`}>{s.label}</p>
-                  <p className="num mt-1 font-display text-2xl font-bold">{s.value}<span className="ml-0.5 text-sm font-medium text-muted">{s.unit}</span></p>
+                  <p className="num mt-1 font-num text-3xl font-semibold">{s.value}<span className="ml-0.5 text-sm font-medium text-muted">{s.unit}</span></p>
                   <p className="num text-[11px] text-muted">target {fmtInt(s.target)}{s.unit === 'g' ? 'g' : ''}</p>
                 </div>
               ))}
               <div className="card col-span-2 flex items-center justify-between !p-3.5">
                 <div>
                   <p className="label text-water">Water</p>
-                  <p className="num mt-1 font-display text-2xl font-bold">{formatWater(view.averages.water, settings.waterUnit)}</p>
+                  <p className="num mt-1 font-num text-3xl font-semibold">{formatWater(view.averages.water, settings.waterUnit)}</p>
                 </div>
                 <div className="text-right">
                   <p className="num text-sm font-semibold">{Math.round((view.averages.water / settings.waterTargetOz) * 100) || 0}%</p>

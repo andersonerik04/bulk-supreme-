@@ -36,7 +36,8 @@ export function CaloriesChart({ data, target, weekly, domain }: { data: CalorieP
         />
         <Bar dataKey="calories" radius={[6, 6, 2, 2]} maxBarSize={weekly ? 22 : 18} animationDuration={900}>
           {data.map((d) => (
-            <Cell key={d.ts} fill={d.calories > target * 1.05 ? c.protein : c.food} fillOpacity={d.calories > target * 1.05 ? 0.85 : 1} />
+            // Bulking: hitting the target is the win. Short days are drawn in gray.
+            <Cell key={d.ts} fill={d.calories >= target * 0.9 ? c.food : c.carbs} fillOpacity={d.calories >= target * 0.9 ? 1 : 0.55} />
           ))}
         </Bar>
         <ReferenceLine y={target} stroke={c.ink} strokeOpacity={0.6} strokeDasharray="4 4" label={{ value: `Target ${fmtInt(target)}`, position: 'insideTopRight', fill: c.muted, fontSize: 11 }} />

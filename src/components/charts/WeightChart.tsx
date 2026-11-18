@@ -40,7 +40,7 @@ export function WeightChart({ data, unit, goal, domain }: Props) {
         <XAxis dataKey="ts" type="number" scale="time" domain={domain} tickFormatter={tickFormatter(span)} tickLine={false} axisLine={false} minTickGap={28} />
         <YAxis domain={[lo, hi]} tickLine={false} axisLine={false} width={44} allowDecimals={false} />
         {goal != null && (
-          <ReferenceLine y={goal} stroke={c.fat} strokeDasharray="5 5" strokeOpacity={0.8} label={{ value: `Goal ${goal}`, position: 'insideBottomRight', fill: c.fat, fontSize: 11 }} />
+          <ReferenceLine y={goal} stroke={c.food} strokeDasharray="5 5" strokeOpacity={0.9} label={{ value: `Goal ${goal}`, position: 'insideBottomRight', fill: c.food, fontSize: 11 }} />
         )}
         <Tooltip
           cursor={{ stroke: c.muted, strokeOpacity: 0.3 }}

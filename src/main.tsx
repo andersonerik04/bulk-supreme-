@@ -5,6 +5,10 @@ import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import { ToastProvider } from './components/Toast';
 import { AppErrorBoundary, DbGate } from './components/StartupGuard';
+import '@fontsource-variable/inter-tight/wght.css';
+import '@fontsource/barlow-condensed/latin-500.css';
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
 import './index.css';
 
 registerSW({ immediate: true });
@@ -12,7 +16,7 @@ registerSW({ immediate: true });
 // Dev convenience: seed/clear sample data from the browser console.
 if (import.meta.env.DEV) {
   void Promise.all([import('./utils/seed'), import('./db/repo')]).then(([seed, repo]) => {
-    Object.assign(window, { ledger: { seed: seed.seedSampleData, clearSample: repo.clearSampleData, reset: repo.resetAll } });
+    Object.assign(window, { anabolic: { seed: seed.seedSampleData, clearSample: repo.clearSampleData, reset: repo.resetAll } });
   });
 }
 

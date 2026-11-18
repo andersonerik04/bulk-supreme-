@@ -20,7 +20,7 @@ export function Heatmap({ from, levels }: { from: DayKey; levels: Map<DayKey, nu
     scroller.current?.scrollTo({ left: scroller.current.scrollWidth });
   }, [weeks.length]);
 
-  const shade = ['bg-line/[0.07]', 'bg-fat/30', 'bg-fat/60', 'bg-fat'];
+  const shade = ['bg-line/[0.07]', 'bg-accent/25', 'bg-accent/55', 'bg-accent'];
   const today = todayKey();
 
   return (

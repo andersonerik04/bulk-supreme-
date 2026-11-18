@@ -20,10 +20,14 @@ export default {
         carbs: 'rgb(var(--carbs) / <alpha-value>)',
         fat: 'rgb(var(--fat) / <alpha-value>)',
         danger: 'rgb(var(--danger) / <alpha-value>)',
+        accent: 'rgb(var(--accent) / <alpha-value>)',
+        'on-accent': 'rgb(var(--on-accent) / <alpha-value>)',
       },
       fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['"Inter Tight Variable"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['"Inter Tight Variable"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        // Condensed athletic numerals for the big figures
+        num: ['"Barlow Condensed"', '"Inter Tight Variable"', 'system-ui', 'sans-serif'],
       },
       borderRadius: { '4xl': '2rem' },
       keyframes: {

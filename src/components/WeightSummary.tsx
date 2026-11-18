@@ -1,17 +1,17 @@
 import { format } from 'date-fns';
 import type { Settings } from '@/db/types';
-import { changeOver, projectGoal, type DailyWeight } from '@/utils/stats';
+import { changeOver, deltaTone, projectGoal, toneClass, type DailyWeight } from '@/utils/stats';
 import { formatWeight, formatWeightDelta, weightToDisplay } from '@/utils/units';
 import { clamp } from '@/utils/format';
 import { Icon } from './Icon';
 import { Sparkline } from './Sparkline';
 import { usePalette } from '@/hooks/usePalette';
 
-function Delta({ label, value, unit }: { label: string; value: number | null; unit: Settings['weightUnit'] }) {
+function Delta({ label, value, unit, goal, current }: { label: string; value: number | null; unit: Settings['weightUnit']; goal?: number; current?: number }) {
   return (
-    <div className="rounded-2xl bg-elevated px-3 py-2.5">
-      <p className="text-[11px] font-medium text-muted">{label}</p>
-      <p className={`num mt-0.5 font-semibold ${value == null ? 'text-muted' : value < 0 ? 'text-fat' : value > 0 ? 'text-food' : ''}`}>
+    <div className="border-l border-line/10 pl-3 first:border-l-0 first:pl-0">
+      <p className="label">{label}</p>
+      <p className={`num mt-1 font-num text-2xl font-semibold leading-none ${value == null ? 'text-muted' : toneClass[deltaTone(value, goal, current)]}`}>
         {value == null ? '—' : formatWeightDelta(value, unit)}
       </p>
     </div>
@@ -35,7 +35,7 @@ export function WeightSummary({ daily, settings, onLog }: { daily: DailyWeight[]
       <div className="flex items-start justify-between">
         <div>
           <p className="label text-weight">Weight</p>
-          <p className="num mt-1 font-display text-4xl font-bold tracking-tight">
+          <p className="num mt-1 font-num text-[54px] font-semibold">
             {weightToDisplay(last.lbs, unit).toFixed(1)}
             <span className="ml-1 text-base font-semibold text-muted">{unit}</span>
           </p>
@@ -55,10 +55,10 @@ export function WeightSummary({ daily, settings, onLog }: { daily: DailyWeight[]
         </div>
       )}
 
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        <Delta label="Since last" value={sinceLast} unit={unit} />
-        <Delta label="7 days" value={changeOver(daily, 7)} unit={unit} />
-        <Delta label="30 days" value={changeOver(daily, 30)} unit={unit} />
+      <div className="mt-4 grid grid-cols-3 gap-3 border-t border-line/[0.07] pt-4">
+        <Delta label="Since last" value={sinceLast} unit={unit} goal={goal} current={last.lbs} />
+        <Delta label="7 days" value={changeOver(daily, 7)} unit={unit} goal={goal} current={last.lbs} />
+        <Delta label="30 days" value={changeOver(daily, 30)} unit={unit} goal={goal} current={last.lbs} />
       </div>
 
       {goal != null && (
@@ -74,7 +74,7 @@ export function WeightSummary({ daily, settings, onLog }: { daily: DailyWeight[]
           </div>
           <p className="mt-2 text-xs text-muted">
             {proj?.daysToGoal === 0
-              ? 'You’re at your goal 🎉'
+              ? 'Goal reached. Set the next one in Settings.'
               : proj?.eta
                 ? <>At {formatWeightDelta(proj.ratePerWeek, unit)}/week, projected <span className="font-semibold text-ink">{format(proj.eta, 'MMM d, yyyy')}</span></>
                 : proj

@@ -65,7 +65,7 @@ export function WaterSheet({ open, onClose, entry, defaultTimestamp }: Props) {
       </div>
       <div className="mt-6 flex gap-3">
         {entry && <button className="btn-danger" onClick={remove}>Delete</button>}
-        <button className="btn flex-1 bg-water text-white" onClick={save}>{entry ? 'Save changes' : 'Add water'}</button>
+        <button className="btn flex-1 bg-water text-on-accent" onClick={save}>{entry ? 'Save changes' : 'Add water'}</button>
       </div>
     </Sheet>
   );
