@@ -82,7 +82,7 @@ export function parseBackup(text: string): BackupFile {
     throw new BackupError('File is not valid JSON');
   }
   const o = obj(raw, 'file');
-  if (o.app !== 'ledger') throw new BackupError('This doesn’t look like a Ledger backup');
+  if (o.app !== 'ledger') throw new BackupError('This doesn’t look like an Anabolic backup');
   if (o.version !== 1) throw new BackupError(`Unsupported backup version: ${String(o.version)}`);
 
   const weights: WeightEntry[] = arr(o.weights, 'weights').map((v) => {

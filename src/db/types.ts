@@ -1,5 +1,6 @@
 /**
- * Ledger data model.
+ * Anabolic data model. (Originally named Ledger: the IndexedDB name, localStorage keys and
+ * backup format id keep "ledger" so data saved before the rename is still found.)
  *
  * Canonical storage units: weight in pounds, water in fluid ounces.
  * Conversion to the user's preferred units happens at the display/input edge
@@ -96,11 +97,12 @@ export const DEFAULT_SETTINGS: Settings = {
   id: 'settings',
   weightUnit: 'lbs',
   waterUnit: 'oz',
-  calorieTarget: 2200,
-  proteinTarget: 160,
-  carbsTarget: 220,
-  fatTarget: 70,
-  waterTargetOz: 100,
+  // Bulking defaults: a moderate surplus for a ~170 lb lifter, ~1 g protein per lb.
+  calorieTarget: 2900,
+  proteinTarget: 180,
+  carbsTarget: 340,
+  fatTarget: 85,
+  waterTargetOz: 120,
   theme: 'dark',
 };
 

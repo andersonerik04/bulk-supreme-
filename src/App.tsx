@@ -35,7 +35,8 @@ export default function App() {
           <Route path="*" element={<Dashboard />} />
         </Routes>
       </main>
-      {pathname !== '/settings' && <Fab />}
+      {/* Log and Settings have their own actions; the FAB would only cover them. */}
+      {pathname !== '/settings' && pathname !== '/log' && <Fab />}
       <TabBar />
     </>
   );

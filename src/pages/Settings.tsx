@@ -159,11 +159,11 @@ export default function SettingsPage() {
 
   async function exportJSON() {
     const b = await exportAll();
-    await saveFile(`ledger-backup-${format(new Date(), 'yyyy-MM-dd')}.json`, JSON.stringify(b, null, 2), 'application/json');
+    await saveFile(`anabolic-backup-${format(new Date(), 'yyyy-MM-dd')}.json`, JSON.stringify(b, null, 2), 'application/json');
   }
   async function exportCSV() {
     const b = await exportAll();
-    await saveFile(`ledger-export-${format(new Date(), 'yyyy-MM-dd')}.csv`, toCSV(b), 'text/csv');
+    await saveFile(`anabolic-export-${format(new Date(), 'yyyy-MM-dd')}.csv`, toCSV(b), 'text/csv');
   }
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -192,7 +192,7 @@ export default function SettingsPage() {
       <div className="stagger space-y-6">
         <Group title="Appearance">
           <Segmented
-            options={[{ value: 'dark', label: '🌙  Dark' }, { value: 'light', label: '☀️  Light' }] as const}
+            options={[{ value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }] as const}
             value={s.theme}
             onChange={(theme) => updateSettings({ theme })}
           />
@@ -248,7 +248,7 @@ export default function SettingsPage() {
         </Group>
 
         <p className="pb-4 text-center text-xs text-muted">
-          Ledger v1.0 · All data stays on this device (IndexedDB). <br />Add to Home Screen from Safari’s share menu to install.
+          Anabolic v2.0 · All data stays on this device (IndexedDB). <br />Add to Home Screen from Safari’s share menu to install.
         </p>
       </div>
 

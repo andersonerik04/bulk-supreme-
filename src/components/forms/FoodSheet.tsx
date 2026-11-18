@@ -101,7 +101,7 @@ export function FoodSheet({ open, onClose, entry, prefill, meal, defaultTimestam
       </div>
       <div className="mt-6 flex gap-3">
         {entry && <button className="btn-danger" onClick={remove}>Delete</button>}
-        <button className="btn flex-1 bg-food text-white" onClick={save}>{entry ? 'Save changes' : 'Add to ' + MEAL_LABELS[m]}</button>
+        <button className="btn flex-1 bg-food text-on-accent" onClick={save}>{entry ? 'Save changes' : 'Add to ' + MEAL_LABELS[m]}</button>
       </div>
     </Sheet>
   );

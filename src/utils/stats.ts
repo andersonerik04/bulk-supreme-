@@ -169,3 +169,15 @@ export function pearson(xs: number[], ys: number[]): number | null {
 }
 
 export const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
+
+/**
+ * Is a weight change good news? Toward the goal weight = good. With no goal set
+ * Anabolic assumes a bulk, so gaining is good.
+ */
+export function deltaTone(deltaLbs: number | null, goalLbs?: number, currentLbs?: number): 'good' | 'bad' | 'neutral' {
+  if (deltaLbs == null || Math.abs(deltaLbs) < 0.05) return 'neutral';
+  const wantUp = goalLbs != null && currentLbs != null ? goalLbs > currentLbs : true;
+  return deltaLbs > 0 === wantUp ? 'good' : 'bad';
+}
+
+export const toneClass = { good: 'text-food', bad: 'text-muted', neutral: 'text-ink' } as const;

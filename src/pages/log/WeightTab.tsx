@@ -7,9 +7,10 @@ import { useWeights } from '@/hooks/useData';
 import { useSettings } from '@/hooks/useSettings';
 import type { WeightEntry } from '@/db/types';
 import { formatWeight, formatWeightDelta } from '@/utils/units';
+import { deltaTone, toneClass } from '@/utils/stats';
 
 export function WeightTab() {
-  const { weightUnit: unit } = useSettings();
+  const { weightUnit: unit, goalWeightLbs } = useSettings();
   const { weights } = useWeights();
   const [sheet, setSheet] = useState<{ entry?: WeightEntry } | null>(null);
   const list = weights ? [...weights].reverse() : [];
@@ -18,7 +19,7 @@ export function WeightTab() {
   return (
     <div className="space-y-4">
       <button className="card tap flex w-full items-center gap-4 text-left" onClick={() => setSheet({})}>
-        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-weight text-white">
+        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-weight text-bg">
           <Icon name="scale" size={26} />
         </span>
         <span className="flex-1">
@@ -45,7 +46,7 @@ export function WeightTab() {
                       {w.note && <p className="truncate text-xs text-muted">{w.note}</p>}
                     </div>
                     {d != null && (
-                      <span className={`num text-xs font-medium ${d < 0 ? 'text-fat' : d > 0 ? 'text-food' : 'text-muted'}`}>{formatWeightDelta(d, unit, false)}</span>
+                      <span className={`num text-xs font-semibold ${toneClass[deltaTone(d, goalWeightLbs, latest?.lbs)]}`}>{formatWeightDelta(d, unit, false)}</span>
                     )}
                     <span className="num w-20 text-right font-semibold">{formatWeight(w.lbs, unit)}</span>
                   </button>

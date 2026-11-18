@@ -57,7 +57,7 @@ export function FoodTab({ initialMeal }: { initialMeal?: MealType }) {
         <div className="mb-4 flex items-end justify-between">
           <div>
             <p className="label">Calories</p>
-            <p className="num font-display text-3xl font-bold">
+            <p className="num font-num text-[42px] font-semibold">
               {fmtInt(totals.calories)}
               <span className="ml-1 text-base font-medium text-muted">/ {fmtInt(settings.calorieTarget)}</span>
             </p>
@@ -76,7 +76,7 @@ export function FoodTab({ initialMeal }: { initialMeal?: MealType }) {
 
       <ScanLauncher meal={meal} defaultTimestamp={ts}>
         {(open) => (
-          <button className="tap flex w-full items-center gap-4 rounded-3xl bg-food p-4 text-left text-black" onClick={open}>
+          <button className="tap flex w-full items-center gap-4 rounded-3xl bg-food p-4 text-left text-on-accent" onClick={open}>
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-black/10"><Icon name="scan" size={26} strokeWidth={2.2} /></span>
             <span className="flex-1">
               <span className="block text-lg font-bold leading-tight">Scan food</span>

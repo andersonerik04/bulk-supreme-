@@ -21,11 +21,11 @@ export default defineConfig(({ command }) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
         manifest: {
-          name: 'Ledger — Health Tracker',
-          short_name: 'Ledger',
-          description: 'Track weight, food and water. Private, offline, on-device.',
-          theme_color: '#0a0a0f',
-          background_color: '#0a0a0f',
+          name: 'Anabolic — Bulk Tracker',
+          short_name: 'Anabolic',
+          description: 'Bulk tracker: weight, food and water, with AI food scanning.',
+          theme_color: '#050505',
+          background_color: '#050505',
           display: 'standalone',
           orientation: 'portrait',
           id: base,
@@ -38,7 +38,8 @@ export default defineConfig(({ command }) => {
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+          // Fonts: precache only the Latin subsets; other scripts load on demand if ever needed.
+        globPatterns: ['**/*.{js,css,html,svg,png}', '**/*-latin-{wght,500,600,700}-normal-*.woff2'],
           navigateFallback: `${base}index.html`,
         },
       }),

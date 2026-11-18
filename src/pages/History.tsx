@@ -66,7 +66,7 @@ export default function History() {
                     <Link to={`/history/${r.day}`} className="flex items-center gap-3 px-4 py-3 active:bg-elevated">
                       <div className="w-12 shrink-0 text-center">
                         <p className="text-[10px] font-semibold uppercase text-muted">{format(fromDayKey(r.day), 'EEE')}</p>
-                        <p className="num font-display text-xl font-bold leading-tight">{format(fromDayKey(r.day), 'd')}</p>
+                        <p className="num font-num text-2xl font-semibold leading-tight">{format(fromDayKey(r.day), 'd')}</p>
                       </div>
                       <div className="min-w-0 flex-1">
                         {empty ? (

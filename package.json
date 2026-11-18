@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.10.0",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
     "date-fns": "^4.1.0",
     "dexie": "^4.4.0",
     "dexie-react-hooks": "^4.4.0",

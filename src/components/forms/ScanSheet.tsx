@@ -191,7 +191,7 @@ function Review({ result, preview, meal: initialMeal, defaultTimestamp, onDone, 
         <img src={preview} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="rounded-full bg-food px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-black">{isLabel ? 'Label' : 'Meal estimate'}</span>
+            <span className="rounded-full bg-food px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-on-accent">{isLabel ? 'Label' : 'Meal estimate'}</span>
             <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${result.confidence === 'high' ? 'bg-line/10 text-ink' : 'bg-line/10 text-muted'}`}>{result.confidence} confidence</span>
           </div>
           {result.note && <p className="mt-1 text-xs text-muted">{result.note}</p>}
@@ -248,7 +248,7 @@ function Review({ result, preview, meal: initialMeal, defaultTimestamp, onDone, 
       <div className="flex items-end justify-between border-t border-line/10 pt-3">
         <div>
           <p className="label">Total</p>
-          <p className="num font-display text-3xl font-bold">{fmtInt(total.cal * mult)}<span className="ml-1 text-sm font-medium text-muted">cal</span></p>
+          <p className="num font-num text-[42px] font-semibold">{fmtInt(total.cal * mult)}<span className="ml-1 text-sm font-medium text-muted">cal</span></p>
         </div>
         <p className="num text-right text-sm text-muted">
           P <b className="text-ink">{Math.round(total.p * mult)}g</b> · C <b className="text-ink">{Math.round(total.c * mult)}g</b> · F <b className="text-ink">{Math.round(total.f * mult)}g</b>
@@ -261,7 +261,7 @@ function Review({ result, preview, meal: initialMeal, defaultTimestamp, onDone, 
         <input type="checkbox" className="h-5 w-5 accent-[rgb(var(--food))]" checked={savePreset} onChange={(e) => setSavePreset(e.target.checked)} />
       </label>
       {error && <p className="text-sm font-medium text-danger">{error}</p>}
-      <button className="btn w-full bg-food text-black" onClick={log}>Add to {MEAL_LABELS[meal]}</button>
+      <button className="btn w-full bg-food text-on-accent" onClick={log}>Add to {MEAL_LABELS[meal]}</button>
       <p className="text-center text-[11px] text-muted">AI estimates can be off — check the numbers before adding.</p>
     </div>
   );

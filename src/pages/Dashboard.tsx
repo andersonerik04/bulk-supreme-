@@ -69,13 +69,13 @@ export default function Dashboard() {
 
       <div className="stagger space-y-4">
         {brandNew && (
-          <section className="card overflow-hidden bg-gradient-to-br from-weight/25 via-surface to-water/20">
-            <p className="label mb-2 text-weight">Welcome to Ledger</p>
-            <h2 className="font-display text-2xl font-bold leading-tight">Your health, logged beautifully.</h2>
-            <p className="mt-2 text-sm text-muted">Track weight, food and water — everything stays private on this device and works offline.</p>
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <button className="btn bg-weight text-white" onClick={() => setWeightOpen(true)}>First weigh-in</button>
-              <button className="btn-ghost" onClick={loadSample} disabled={seeding}>{seeding ? 'Loading…' : 'Try sample data'}</button>
+          <section className="card overflow-hidden">
+            <p className="label mb-3 text-food">Welcome to Anabolic</p>
+            <h2 className="font-display text-[30px] font-bold leading-[1.05] tracking-tight">Eat. Lift. Grow.<br /><span className="text-muted">Track every gram.</span></h2>
+            <p className="mt-3 text-sm text-muted">Log weight, food and water. Snap a nutrition label or your plate and the macros fill themselves in. Your data stays on this phone.</p>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <button className="btn-accent" onClick={() => setWeightOpen(true)}>First weigh-in</button>
+              <button className="btn-ghost" onClick={loadSample} disabled={seeding}>{seeding ? 'Loading…' : 'Sample data'}</button>
             </div>
           </section>
         )}
@@ -90,7 +90,7 @@ export default function Dashboard() {
               <div className="absolute inset-[22px]">
                 <ProgressRing value={waterP} size={104} stroke={14} color="rgb(var(--water))" label={`Water ${Math.round(waterP * 100)}% of goal`}>
                   <div className="text-center">
-                    <p className="num font-display text-xl font-bold leading-none">{fmtInt(t.calories)}</p>
+                    <p className="num font-num text-2xl font-semibold leading-none">{fmtInt(t.calories)}</p>
                     <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-muted">cal</p>
                   </div>
                 </ProgressRing>
@@ -99,12 +99,12 @@ export default function Dashboard() {
             <div className="flex-1 space-y-4">
               <div>
                 <p className="label flex items-center gap-1.5 text-food"><span className="h-2 w-2 rounded-full bg-food" />Calories</p>
-                <p className="num mt-1 text-xl font-bold">{fmtInt(t.calories)}<span className="text-sm font-medium text-muted"> / {fmtInt(settings.calorieTarget)}</span></p>
+                <p className="num mt-1 font-num text-[30px] font-semibold leading-none">{fmtInt(t.calories)}<span className="text-sm font-medium text-muted"> / {fmtInt(settings.calorieTarget)}</span></p>
                 <p className={`text-xs ${remaining >= 0 ? 'text-muted' : 'text-danger'}`}>{remaining >= 0 ? `${fmtInt(remaining)} remaining` : `${fmtInt(-remaining)} over target`}</p>
               </div>
               <div>
                 <p className="label flex items-center gap-1.5 text-water"><span className="h-2 w-2 rounded-full bg-water" />Water</p>
-                <p className="num mt-1 text-xl font-bold">{formatWater(today.waterOz, settings.waterUnit, false)}<span className="text-sm font-medium text-muted"> / {formatWater(settings.waterTargetOz, settings.waterUnit)}</span></p>
+                <p className="num mt-1 font-num text-[30px] font-semibold leading-none">{formatWater(today.waterOz, settings.waterUnit, false)}<span className="text-sm font-medium text-muted"> / {formatWater(settings.waterTargetOz, settings.waterUnit)}</span></p>
                 <p className="text-xs text-muted">{Math.round(waterP * 100)}% of goal</p>
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function Dashboard() {
               </div>
             </>
           ) : (
-            <EmptyState icon="food" tone="text-food" title="No food logged today" body="Add breakfast to see your macro split." action={<Link to="/log?tab=food" className="btn bg-food text-white">Log a meal</Link>} />
+            <EmptyState icon="food" tone="text-food" title="No food logged today" body="Add breakfast to see your macro split." action={<Link to="/log?tab=food" className="btn bg-food text-on-accent">Log a meal</Link>} />
           )}
         </section>
 
@@ -141,12 +141,12 @@ export default function Dashboard() {
           <WeightSummary daily={daily} settings={settings} onLog={() => setWeightOpen(true)} />
         ) : (
           <section className="card">
-            <EmptyState icon="scale" tone="text-weight" title="No weigh-ins yet" body="Log your weight to see your trend, rolling average and goal projection." action={<button className="btn bg-weight text-white" onClick={() => setWeightOpen(true)}>Log weight</button>} />
+            <EmptyState icon="scale" tone="text-weight" title="No weigh-ins yet" body="Log your weight to see your trend, rolling average and goal projection." action={<button className="btn bg-weight text-bg" onClick={() => setWeightOpen(true)}>Log weight</button>} />
           </section>
         )}
 
         {streak.count > 0 && !streak.loggedToday && (
-          <p className="px-2 text-center text-sm text-muted">Log something today to keep your {plural(streak.count, 'day')} streak alive 🔥</p>
+          <p className="px-2 text-center text-sm text-muted">Log something today to keep your {plural(streak.count, 'day')} streak alive</p>
         )}
       </div>
 

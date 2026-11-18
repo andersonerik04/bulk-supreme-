@@ -83,7 +83,7 @@ export function WeightSheet({ open, onClose, entry, lastLbs, defaultTimestamp }:
         <div className="text-center">
           <input
             inputMode="decimal"
-            className={`num w-40 bg-transparent text-center font-display text-6xl font-bold tracking-tight text-weight outline-none ${errors.weight ? 'text-danger' : ''}`}
+            className={`num w-40 bg-transparent text-center font-num text-[80px] font-semibold text-weight outline-none ${errors.weight ? 'text-danger' : ''}`}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             placeholder="0.0"
@@ -102,7 +102,7 @@ export function WeightSheet({ open, onClose, entry, lastLbs, defaultTimestamp }:
           <Field label="Note (optional)" value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. morning, fasted" maxLength={120} error={errors.note} />
           <div className="scrollbar-none -mx-5 mt-2 flex gap-2 overflow-x-auto px-5">
             {NOTE_CHIPS.map((c) => (
-              <button key={c} onClick={() => setNote(c)} className={`tap shrink-0 rounded-full px-3 py-1.5 text-xs font-medium ${note === c ? 'bg-weight text-white' : 'bg-elevated text-muted'}`}>
+              <button key={c} onClick={() => setNote(c)} className={`tap shrink-0 rounded-full px-3 py-1.5 text-xs font-medium ${note === c ? 'bg-weight text-bg' : 'bg-elevated text-muted'}`}>
                 {c}
               </button>
             ))}
@@ -114,7 +114,7 @@ export function WeightSheet({ open, onClose, entry, lastLbs, defaultTimestamp }:
         {entry && (
           <button className="btn-danger" onClick={remove} aria-label="Delete">Delete</button>
         )}
-        <button className="btn flex-1 bg-weight text-white" onClick={save}>
+        <button className="btn flex-1 bg-weight text-bg" onClick={save}>
           {entry ? 'Save changes' : 'Log weight'}
         </button>
       </div>

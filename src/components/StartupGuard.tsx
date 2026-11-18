@@ -30,7 +30,7 @@ function FatalScreen({ title, body, detail }: { title: string; body: ReactNode; 
       role="alert"
     >
       <div className="card">
-        <p className="label mb-2 text-danger">Ledger couldn’t start</p>
+        <p className="label mb-2 text-danger">Anabolic couldn’t start</p>
         <h1 className="font-display text-2xl font-bold leading-tight">{title}</h1>
         <div className="mt-3 space-y-2 text-sm text-muted">{body}</div>
         {detail && <pre className="mt-4 whitespace-pre-wrap break-words rounded-2xl bg-elevated p-3 text-xs text-muted">{detail}</pre>}
@@ -71,23 +71,23 @@ export function DbGate({ children }: { children: ReactNode }) {
   if (state === 'ready') return <>{children}</>;
   if (state === 'opening') {
     return (
-      <div className="grid min-h-[100dvh] place-items-center" aria-busy="true" aria-label="Loading Ledger">
+      <div className="grid min-h-[100dvh] place-items-center" aria-busy="true" aria-label="Loading Anabolic">
         <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-line/10 border-t-weight" />
       </div>
     );
   }
   return (
     <FatalScreen
-      title="Safari isn’t letting Ledger store data"
+      title="Safari isn’t letting Anabolic store data"
       body={
         <>
-          <p>Ledger keeps everything on this phone in the browser’s storage, and Safari {state.timedOut ? 'didn’t respond' : 'refused access'}. Usually one of these fixes it:</p>
+          <p>Anabolic keeps everything on this phone in the browser’s storage, and Safari {state.timedOut ? 'didn’t respond' : 'refused access'}. Usually one of these fixes it:</p>
           <ul className="list-disc space-y-1 pl-5">
             <li>
               <b className="text-ink">Settings → Apps → Safari</b> → turn <b className="text-ink">off</b> “Block All Cookies” (it also blocks app storage).
             </li>
             <li>Don’t use a Private Browsing tab.</li>
-            <li>Fully close Safari or the Ledger app (swipe it away), then open it again.</li>
+            <li>Fully close Safari or the Anabolic app (swipe it away), then open it again.</li>
           </ul>
         </>
       }
@@ -104,7 +104,7 @@ export class AppErrorBoundary extends Component<{ children: ReactNode }, { error
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('Ledger crashed', error, info.componentStack);
+    console.error('Anabolic crashed', error, info.componentStack);
   }
 
   render() {
