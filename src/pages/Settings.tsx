@@ -15,10 +15,12 @@ import { seedSampleData } from '@/utils/seed';
 import { hasErrors, numberRule, parseNum, validate } from '@/utils/validation';
 import { waterFromDisplay, waterToDisplay, weightFromDisplay, weightToDisplay } from '@/utils/units';
 import { format } from 'date-fns';
+import { useLocation } from 'react-router-dom';
+import { clearApiKey, getApiKey, looksLikeApiKey, setApiKey } from '@/ai/apiKey';
 
-function Group({ title, children }: { title: string; children: ReactNode }) {
+function Group({ title, children, id }: { title: string; children: ReactNode; id?: string }) {
   return (
-    <section>
+    <section id={id} className="scroll-mt-6">
       <h2 className="label mb-2 px-1">{title}</h2>
       <div className="card space-y-4">{children}</div>
     </section>
@@ -35,6 +37,56 @@ function ActionRow({ icon, label, detail, onClick, tone = 'text-ink', disabled }
       </span>
       <Icon name="right" size={18} className="text-muted/60" />
     </button>
+  );
+}
+
+function AiKeySettings() {
+  const toast = useToast();
+  const [saved, setSaved] = useState(() => getApiKey());
+  const [draft, setDraft] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const [testing, setTesting] = useState(false);
+
+  async function test(key: string) {
+    setTesting(true);
+    const { testApiKey } = await import('@/ai/scan');
+    const r = await testApiKey(key);
+    setTesting(false);
+    if (r.ok) toast({ message: 'Key works — scanning is ready' });
+    else setErr(r.message);
+    return r.ok;
+  }
+
+  async function save() {
+    if (!looksLikeApiKey(draft)) return setErr('That doesn’t look like an Anthropic API key (it starts with sk-ant-).');
+    setErr(null);
+    setApiKey(draft);
+    setSaved(getApiKey());
+    setDraft('');
+    await test(draft.trim());
+  }
+
+  return (
+    <>
+      <p className="text-sm text-muted">
+        Snap a nutrition label or your plate and Claude fills in the macros. Uses your own Anthropic API key — create one at console.anthropic.com. Each scan costs a few cents, billed to your Anthropic account.
+      </p>
+      {saved ? (
+        <div className="flex items-center gap-3 rounded-2xl bg-elevated px-4 py-3">
+          <Icon name="key" size={18} className="text-food" />
+          <span className="num flex-1 text-sm">sk-ant-…{saved.slice(-4)}</span>
+          <button className="text-sm font-semibold text-ink" onClick={() => void test(saved)} disabled={testing}>{testing ? 'Testing…' : 'Test'}</button>
+          <button className="text-sm font-semibold text-danger" onClick={() => { clearApiKey(); setSaved(null); toast({ message: 'API key removed' }); }}>Remove</button>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <Field label="Anthropic API key" type="password" autoComplete="off" spellCheck={false} value={draft} onChange={(e) => { setDraft(e.target.value); setErr(null); }} placeholder="sk-ant-…" />
+          <button className="btn-primary w-full" onClick={save} disabled={!draft || testing}>{testing ? 'Checking…' : 'Save key'}</button>
+        </div>
+      )}
+      {err && <p className="text-sm font-medium text-danger">{err}</p>}
+      <p className="text-xs text-muted">The key stays on this phone and is never included in backups. Photos you scan are sent to Anthropic to be analyzed.</p>
+    </>
   );
 }
 
@@ -62,8 +114,18 @@ export default function SettingsPage() {
   const [busy, setBusy] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
+  // Deep link from the scanner (/settings#ai). Runs after App's scroll-to-top.
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash !== '#ai') return;
+    const t = setTimeout(() => document.getElementById('ai')?.scrollIntoView({ behavior: 'smooth' }), 120);
+    return () => clearTimeout(t);
+  }, [hash]);
+
   // Re-sync the form when settings load or units change.
-  useEffect(() => setForm(toForm(s)), [s]);
+  useEffect(() => {
+    setForm(toForm(s));
+  }, [s]);
 
   const dirty = JSON.stringify(form) !== JSON.stringify(toForm(s));
   const set = (k: keyof TargetForm) => (e: React.ChangeEvent<HTMLInputElement>) => setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -145,6 +207,10 @@ export default function SettingsPage() {
             <span className="font-medium">Water</span>
             <div className="w-40"><Segmented options={[{ value: 'oz', label: 'oz' }, { value: 'ml', label: 'ml' }] as const} value={s.waterUnit} onChange={(waterUnit: WaterUnit) => updateSettings({ waterUnit })} size="sm" /></div>
           </div>
+        </Group>
+
+        <Group title="AI food scanning" id="ai">
+          <AiKeySettings />
         </Group>
 
         <Group title="Daily targets">

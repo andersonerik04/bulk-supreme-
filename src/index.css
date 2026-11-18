@@ -161,3 +161,13 @@
 .recharts-tooltip-cursor {
   fill: rgb(var(--line) / 0.04);
 }
+
+/* Scanner sweep over the photo while Claude reads it */
+.scan-line {
+  top: -6rem;
+  background: linear-gradient(to bottom, transparent, rgb(var(--food) / 0.35) 70%, rgb(var(--food)) 98%, transparent);
+  animation: scan-sweep 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes scan-sweep {
+  to { transform: translateY(20rem); }
+}

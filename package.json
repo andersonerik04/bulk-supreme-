@@ -10,13 +10,15 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.10.0",
     "date-fns": "^4.1.0",
     "dexie": "^4.4.0",
     "dexie-react-hooks": "^4.4.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.0",
-    "recharts": "^3.2.1"
+    "recharts": "^3.2.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

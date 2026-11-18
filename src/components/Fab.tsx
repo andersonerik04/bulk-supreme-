@@ -5,6 +5,7 @@ import { Sheet } from './Sheet';
 import { useToast } from './Toast';
 import { WeightSheet } from './forms/WeightSheet';
 import { WaterSheet } from './forms/WaterSheet';
+import { ScanLauncher } from './forms/ScanSheet';
 import { useSettings } from '@/hooks/useSettings';
 import { useWeights } from '@/hooks/useData';
 import { addWater, deleteWater } from '@/db/repo';
@@ -32,6 +33,8 @@ export function Fab() {
   }
 
   return (
+    <ScanLauncher meal={meal}>
+      {(openScan) => (
     <>
       <button
         onClick={() => setOpen(true)}
@@ -43,6 +46,11 @@ export function Fab() {
       </button>
 
       <Sheet open={open} onClose={() => setOpen(false)} title="Quick log">
+        <button className="tap mb-3 flex w-full items-center gap-4 rounded-3xl bg-food p-4 text-left text-black" onClick={() => { openScan(); setOpen(false); }}>
+              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-black/10"><Icon name="scan" strokeWidth={2.2} /></span>
+              <span className="flex-1"><span className="block font-bold">Scan food</span><span className="text-xs opacity-70">Label or plate → macros</span></span>
+              <Icon name="camera" strokeWidth={2.2} />
+            </button>
         <div className="grid grid-cols-2 gap-3">
           <button className="tap flex flex-col items-start gap-6 rounded-3xl bg-weight/15 p-4 text-left" onClick={() => { setOpen(false); setWeightOpen(true); }}>
             <span className="grid h-11 w-11 place-items-center rounded-2xl bg-weight text-white"><Icon name="scale" /></span>
@@ -72,5 +80,7 @@ export function Fab() {
       <WeightSheet open={weightOpen} onClose={() => setWeightOpen(false)} lastLbs={lastLbs} />
       <WaterSheet open={waterOpen} onClose={() => setWaterOpen(false)} />
     </>
+      )}
+    </ScanLauncher>
   );
 }
