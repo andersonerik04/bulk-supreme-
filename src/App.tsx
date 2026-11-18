@@ -17,7 +17,10 @@ export default function App() {
   const settings = useSettings();
   useApplyTheme(settings.theme);
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // Braced body: scrollTo() returns a Promise in newer browsers, and React would call it as a cleanup.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
